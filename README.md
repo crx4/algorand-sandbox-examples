@@ -1,4 +1,6 @@
-# test-project
+# Algorand docs examples on JS SDK via Vue.js 
+
+This project assumes that you've already installed the [sandbox](https://github.com/algorand/sandbox). Please run the sandbox's docker container then continue building as below.
 
 ## Project setup
 ```
