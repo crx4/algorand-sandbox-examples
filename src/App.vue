@@ -17,10 +17,21 @@
     <vue-json-pretty
         :data="params">
     </vue-json-pretty>
+
+    <hr>
+
+    <h1>
+      Create an Account
+      <button @click="createNewAccount(true)">Create Now</button>
+    </h1>
+    <vue-json-pretty
+        :data="account">
+    </vue-json-pretty>
   </div>
 </template>
 
 <script>
+import localforage from 'localforage'
 import VueJsonPretty from 'vue-json-pretty'
 import { RefreshCwIcon } from 'vue-feather-icons'
 import 'vue-json-pretty/lib/styles.css'
@@ -32,7 +43,9 @@ export default {
       token: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
       server: 'http://localhost',
       port: 4001,
-      status: {}
+      status: {},
+      params: {},
+      account: {},
     };
   },
   components: {
@@ -49,6 +62,36 @@ export default {
       this.client.getTransactionParams()
           .do()
           .then(data => this.params = data);
+    },
+    createNewAccount(recreate = false) {
+      let account = window.algosdk.generateAccount();
+      this.account = {
+        address: account.addr,
+        passphrase: window.algosdk.secretKeyToMnemonic(account.sk)
+      }
+
+      if (recreate) {
+        localforage.setItem('algo-account', this.account);
+
+        this.fetchWalletInfo();
+      }
+    },
+    fetchAccount() {
+      localforage.getItem('algo-account').then(value => {
+        if (value) {
+          this.account = value;
+
+          this.fetchWalletInfo();
+
+          return;
+        }
+
+        this.createNewAccount();
+
+        localforage.setItem('algo-account', this.account);
+
+        this.fetchWalletInfo();
+      });
     }
   },
   created() {
@@ -57,6 +100,8 @@ export default {
     this.fetchStatus();
 
     this.fetchParams();
+
+    this.fetchAccount();
   }
 }
 </script>
@@ -70,5 +115,16 @@ export default {
   background-color: #2c3e50;
   color: azure;
   margin-top: 5px;
+
+  h1 {
+    position: relative;
+
+    button {
+      position: absolute;
+      top: .75rem;
+      margin-left: 1rem;
+      margin-bottom: 10px;
+    }
+  }
 }
 </style>
