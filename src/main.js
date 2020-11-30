@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+import './core/algosdk.min'
 
 Vue.config.productionTip = false
 
