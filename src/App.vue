@@ -7,6 +7,16 @@
     <vue-json-pretty
         :data="status">
     </vue-json-pretty>
+
+    <hr>
+
+    <h1>
+      Algorand suggested parameters
+      <a href="#" @click.prevent="fetchParams"> <refresh-cw-icon size="0.5x"></refresh-cw-icon></a>
+    </h1>
+    <vue-json-pretty
+        :data="params">
+    </vue-json-pretty>
   </div>
 </template>
 
@@ -34,12 +44,19 @@ export default {
       this.client.status()
           .do()
           .then(data => this.status = data);
+    },
+    fetchParams() {
+      this.client.getTransactionParams()
+          .do()
+          .then(data => this.params = data);
     }
   },
   created() {
     this.client = new window.algosdk.Algodv2(this.token, this.server, this.port);
 
     this.fetchStatus();
+
+    this.fetchParams();
   }
 }
 </script>
