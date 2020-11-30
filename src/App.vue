@@ -27,6 +27,17 @@
     <vue-json-pretty
         :data="account">
     </vue-json-pretty>
+
+    <hr>
+
+    <h1>
+      Wallet Info
+      <a href="#" @click.prevent="fetchWalletInfo"> <refresh-cw-icon size="0.5x"></refresh-cw-icon></a>
+    </h1>
+    <vue-json-pretty
+        :data="wallet">
+    </vue-json-pretty>
+
   </div>
 </template>
 
@@ -46,6 +57,7 @@ export default {
       status: {},
       params: {},
       account: {},
+      wallet: {},
     };
   },
   components: {
@@ -92,6 +104,11 @@ export default {
 
         this.fetchWalletInfo();
       });
+    },
+    fetchWalletInfo() {
+      this.client.accountInformation(this.account.address)
+          .do()
+          .then(info => this.wallet = info);
     }
   },
   created() {
