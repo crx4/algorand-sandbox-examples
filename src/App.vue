@@ -24,12 +24,12 @@
       Create an Account
       <button @click="createNewAccount(true)">Create Now</button>
     </h1>
-    <a href="https://bank.testnet.algorand.network/" target="_blank">
-      <external-link-icon size="1.0x"></external-link-icon>
+    <a href="https://bank.testnet.algorand.network/" target="_blank" class="link">
+      <external-link-icon class="link-icon" size="1.0x"></external-link-icon>
       Fund the account for testnet
     </a>
-    <a href="#" @click.prevent="copyAddress">
-      <copy-icon size="1.0x"></copy-icon> {{ copyAddressText }}
+    <a href="#" @click.prevent="copyAddress" class="link">
+      <copy-icon class="link-icon" size="1.0x"></copy-icon> {{ copyAddressText }}
     </a>
     <br>
     <vue-json-pretty
@@ -39,11 +39,11 @@
     <hr>
 
     <h1>
-      Wallet Info
-      <a href="#" @click.prevent="fetchWalletInfo"> <refresh-cw-icon size="0.5x"></refresh-cw-icon></a>
+      Account Info
+      <a href="#" @click.prevent="fetchAccountInfo"> <refresh-cw-icon size="0.5x"></refresh-cw-icon></a>
     </h1>
     <vue-json-pretty
-        :data="wallet">
+        :data="accountInfo">
     </vue-json-pretty>
 
   </div>
@@ -65,7 +65,7 @@ export default {
       status: {},
       params: {},
       account: {},
-      wallet: {},
+      accountInfo: {},
       copyAddressText: 'Copy address'
     };
   },
@@ -101,7 +101,7 @@ export default {
       if (recreate) {
         localforage.setItem('algo-account', this.account);
 
-        this.fetchWalletInfo();
+        this.fetchAccountInfo();
       }
     },
     fetchAccount() {
@@ -109,7 +109,7 @@ export default {
         if (value) {
           this.account = value;
 
-          this.fetchWalletInfo();
+          this.fetchAccountInfo();
 
           return;
         }
@@ -118,13 +118,13 @@ export default {
 
         localforage.setItem('algo-account', this.account);
 
-        this.fetchWalletInfo();
+        this.fetchAccountInfo();
       });
     },
-    fetchWalletInfo() {
+    fetchAccountInfo() {
       this.client.accountInformation(this.account.address)
           .do()
-          .then(info => this.wallet = info);
+          .then(info => this.accountInfo = info);
     },
     async copyAddress() {
       if (!navigator.clipboard) {
@@ -155,9 +155,9 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   background-color: #2c3e50;
   color: azure;
+  padding: 0 1rem;
   margin-top: 5px;
 
   .mb-0 {
@@ -166,11 +166,14 @@ export default {
 
   a {
     color: wheat;
+  }
+
+  .link {
     margin-bottom: 1rem;
     float: right;
     font-size: small;
 
-    svg { margin-left: 2rem; }
+    .link-icon { margin-left: 2rem; }
   }
 
   h1 {
