@@ -20,10 +20,18 @@
 
     <hr>
 
-    <h1>
+    <h1 class="mb-0">
       Create an Account
       <button @click="createNewAccount(true)">Create Now</button>
     </h1>
+    <a href="https://bank.testnet.algorand.network/" target="_blank">
+      <external-link-icon size="1.0x"></external-link-icon>
+      Fund the account for testnet
+    </a>
+    <a href="#" @click.prevent="copyAddress">
+      <copy-icon size="1.0x"></copy-icon> {{ copyAddressText }}
+    </a>
+    <br>
     <vue-json-pretty
         :data="account">
     </vue-json-pretty>
@@ -44,7 +52,7 @@
 <script>
 import localforage from 'localforage'
 import VueJsonPretty from 'vue-json-pretty'
-import { RefreshCwIcon } from 'vue-feather-icons'
+import { RefreshCwIcon, CopyIcon, ExternalLinkIcon } from 'vue-feather-icons'
 import 'vue-json-pretty/lib/styles.css'
 export default {
   name: 'App',
@@ -58,11 +66,19 @@ export default {
       params: {},
       account: {},
       wallet: {},
+      copyAddressText: 'Copy address'
     };
   },
   components: {
     VueJsonPretty,
-    RefreshCwIcon
+    RefreshCwIcon,
+    CopyIcon,
+    ExternalLinkIcon
+  },
+  computed: {
+    accountAddress() {
+      return 'address' in this.account ? this.account.address : '';
+    }
   },
   methods: {
     fetchStatus() {
@@ -80,7 +96,7 @@ export default {
       this.account = {
         address: account.addr,
         passphrase: window.algosdk.secretKeyToMnemonic(account.sk)
-      }
+      };
 
       if (recreate) {
         localforage.setItem('algo-account', this.account);
@@ -109,6 +125,17 @@ export default {
       this.client.accountInformation(this.account.address)
           .do()
           .then(info => this.wallet = info);
+    },
+    async copyAddress() {
+      if (!navigator.clipboard) {
+        alert('Copy to clipboard not supported!')
+      }
+
+      await navigator.clipboard.writeText(this.accountAddress);
+
+      this.copyAddressText = 'Copied!';
+
+      setTimeout(() => this.copyAddressText = 'Copy Address', 1000);
     }
   },
   created() {
@@ -132,6 +159,19 @@ export default {
   background-color: #2c3e50;
   color: azure;
   margin-top: 5px;
+
+  .mb-0 {
+    margin-bottom: 0;
+  }
+
+  a {
+    color: wheat;
+    margin-bottom: 1rem;
+    float: right;
+    font-size: small;
+
+    svg { margin-left: 2rem; }
+  }
 
   h1 {
     position: relative;
