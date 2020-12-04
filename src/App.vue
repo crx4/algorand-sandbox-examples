@@ -71,6 +71,23 @@
 
     <br>
 
+    <hr>
+
+    <h1>
+      Read the last transaction from the blockchain
+      <button @click="fetchTxnInfo" :disabled="!txId.length">Get Info</button>
+    </h1>
+    <div v-if="txId">
+      <vue-json-pretty
+          :data="txnInfo">
+      </vue-json-pretty>
+    </div>
+    <p v-else>
+      Please generate a transaction before.
+    </p>
+
+    <br>
+
   </div>
 </template>
 
@@ -98,6 +115,7 @@ export default {
       params: {},
       account: {},
       accountInfo: {},
+      txnInfo: {},
       copyAddressText: 'Copy address',
       sending: false
     };
@@ -228,6 +246,9 @@ export default {
         lastRound++;
         await this.client.statusAfterBlock(lastRound).do();
       }
+    },
+    async fetchTxnInfo() {
+      this.txnInfo = await this.client.pendingTransactionInformation(this.txId).do();
     }
   },
   created() {
