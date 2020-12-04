@@ -5,6 +5,10 @@
       <a href="#" @click.prevent="fetchStatus">
         <refresh-cw-icon size="0.5x"></refresh-cw-icon>
       </a>
+      <a href="https://developer.algorand.org/docs/build-apps/connect/#check-node-status"
+         target="_blank" class="link-info">
+        <info-icon size="1.0x"></info-icon>
+      </a>
     </h1>
     <vue-json-pretty
         :data="status">
@@ -17,6 +21,10 @@
       <a href="#" @click.prevent="fetchParams">
         <refresh-cw-icon size="0.5x"></refresh-cw-icon>
       </a>
+      <a href="https://developer.algorand.org/docs/build-apps/connect/#check-suggested-transaction-parameters"
+         target="_blank" class="link-info">
+        <info-icon size="1.0x"></info-icon>
+      </a>
     </h1>
     <vue-json-pretty
         :data="params">
@@ -27,6 +35,10 @@
     <h1 class="mb-0">
       Create an Account
       <button @click="createNewAccount(true)">Create Now</button>
+      <a href="https://developer.algorand.org/docs/build-apps/hello_world/#create-an-account"
+         target="_blank" class="link-info">
+        <info-icon size="1.0x"></info-icon>
+      </a>
     </h1>
     <a href="https://bank.testnet.algorand.network/" target="_blank" class="link">
       <external-link-icon class="link-icon" size="1.0x"></external-link-icon>
@@ -46,6 +58,10 @@
       <a href="#" @click.prevent="fetchAccountInfo">
         <refresh-cw-icon size="0.5x"></refresh-cw-icon>
       </a>
+      <a href="https://developer.algorand.org/docs/build-apps/hello_world/#check-your-balance"
+         target="_blank" class="link-info">
+        <info-icon size="1.0x"></info-icon>
+      </a>
     </h1>
     <vue-json-pretty
         :data="accountInfo">
@@ -55,6 +71,10 @@
 
     <h1>
       Send a Pay Transaction To TestNet Faucet Address
+      <a href="https://developer.algorand.org/docs/build-apps/hello_world/#construct-the-transaction"
+         target="_blank" class="link-info">
+        <info-icon size="1.0x"></info-icon>
+      </a>
     </h1>
     <input type="number" min="0" v-model="amount" :disabled="sending">
     <button :disabled="!validAmount" @click="submitTxt">
@@ -76,6 +96,10 @@
     <h1>
       Read the last transaction from the blockchain
       <button @click="fetchTxnInfo" :disabled="!txId.length">Get Info</button>
+      <a href="https://developer.algorand.org/docs/build-apps/hello_world/#read-the-transaction-from-the-blockchain"
+         target="_blank" class="link-info">
+        <info-icon size="1.0x"></info-icon>
+      </a>
     </h1>
     <div v-if="txId">
       <vue-json-pretty
@@ -94,7 +118,7 @@
 <script>
 import localforage from 'localforage'
 import VueJsonPretty from 'vue-json-pretty'
-import {RefreshCwIcon, CopyIcon, ExternalLinkIcon} from 'vue-feather-icons'
+import {RefreshCwIcon, CopyIcon, ExternalLinkIcon, InfoIcon} from 'vue-feather-icons'
 import 'vue-json-pretty/lib/styles.css'
 
 export default {
@@ -124,7 +148,8 @@ export default {
     VueJsonPretty,
     RefreshCwIcon,
     CopyIcon,
-    ExternalLinkIcon
+    ExternalLinkIcon,
+    InfoIcon
   },
   computed: {
     accountAddress() {
@@ -301,6 +326,11 @@ export default {
 
   .link-left {
     float: left !important;
+  }
+
+  .link-info {
+    float: right !important;
+    margin-top: 1rem;
   }
 
   h1 {
